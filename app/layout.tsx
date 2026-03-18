@@ -10,33 +10,33 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://signalilovech.com'),
-  title: 'SignalILovech.com – карта на сигналите в Община Ловеч',
+  metadataBase: new URL('https://signaliburgas.com'),
+  title: 'SignalIBurgas.com – карта на сигналите в Община Бургас',
   description: 'Подай сигнал за проблем по пътя за 30 секунди (снимка + място). Виж всички сигнали на карта.',
   verification: {
     google: 'Xjz-FQa2dVvQcSlMyMGmRPRxq5KKULw0TCK7alj0b5c',
   },
   openGraph: {
-    title: 'SignalILovech.com – карта на сигналите в Община Ловеч',
+    title: 'SignalIBurgas.com – карта на сигналите в Община Бургас',
     description: 'Подай сигнал за проблем по пътя за 30 секунди (снимка + място). Виж всички сигнали на карта.',
-    url: 'https://signalilovech.com',
-    siteName: 'Сигнали Ловеч',
+    url: 'https://signaliburgas.com',
+    siteName: 'Сигнали Бургас',
     locale: 'bg_BG',
     type: 'website',
     images: [
       {
-        url: 'https://signalilovech.com/og-image.png',
+        url: 'https://signaliburgas.com/og-image.png',
         width: 1200,
         height: 630,
-        alt: 'SignalILovech.com – карта на сигналите в Община Ловеч',
+        alt: 'SignalIBurgas.com – карта на сигналите в Община Бургас',
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'SignalILovech.com – карта на сигналите в Община Ловеч',
+    title: 'SignalIBurgas.com – карта на сигналите в Община Бургас',
     description: 'Подай сигнал за проблем по пътя за 30 секунди (снимка + място). Виж всички сигнали на карта.',
-    images: ['https://signalilovech.com/og-image.png'],
+    images: ['https://signaliburgas.com/og-image.png'],
   },
 };
 

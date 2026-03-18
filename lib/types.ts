@@ -4,7 +4,7 @@
 
 export type Severity = 1 | 2 | 3;
 
-/** Multi-category civic reporting (matches Postgres report_category enum). */
+/** Multi-category civic reporting (stored in Postgres as TEXT in `reports.category`). */
 export type ReportCategory =
   | 'pothole'
   | 'fallen_tree'
@@ -13,7 +13,7 @@ export type ReportCategory =
   | 'traffic_sign'
   | 'hazard';
 
-/** Report status (matches Postgres report_status enum). */
+/** Report status (stored in Postgres as TEXT in `reports.status`). */
 export type ReportStatus = 'new' | 'in_progress' | 'resolved';
 
 export interface Report {
@@ -119,91 +119,77 @@ export const CATEGORY_ICONS: Record<ReportCategory, string> = {
   hazard: '⚠️',
 };
 
-/** Settlements in Община Ловеч (for dropdown). */
-export const SETTLEMENTS_LOVECH: string[] = [
-  'Lovech',
-  'Bahovitsa',
-  'Aleksandrovo',
-  'Slavyani',
-  'Vladinya',
-  'Goran',
-  'Hlevene',
-  'Kazachevo',
-  'Lisets',
-  'Malinovo',
-  'Skobelevo',
-  'Yoglav',
-  'Radyuvene',
-  'Sokolovo',
-  'Slivek',
-  'Presyaka',
-  'Gostinya',
-  'Smochan',
-  'Slatina',
-  'Doyrentsi',
-  'Umarevtsi',
-  'Друго',
+/** Settlements in Община Бургас (for dropdown). */
+export const SETTLEMENTS_BURGAS: string[] = [
+  'Burgas',
+  'Balgarovo',
+  'Banevo',
+  'Bratovo',
+  'Bryastovets',
+  'Cherno More',
+  'Dimchevo',
+  'Draganovo',
+  'Izvor',
+  'Izvorishte',
+  'Marinka',
+  'Mirolyubovo',
+  'Ravnets',
+  'Rudnik',
+  'Tvarditsa',
+  'Vetren',
+  'ДРУГО (Other)',
 ];
 
-/** Center + zoom per settlement (for map flyTo). Keys must match SETTLEMENTS_LOVECH (excluding Друго). Lat/lng can be refreshed by running scripts/fetch-lovech-settlement-centers.mjs and merging scripts/lovech-settlements-centers.json. */
-export const SETTLEMENT_CENTERS_LOVECH: Record<string, { lat: number; lng: number; zoom: number }> = {
-  Lovech:       { lat: 43.143214201771464, lng: 24.70434890006551,  zoom: 13 },
-  Bahovitsa:    { lat: 43.18867924232698,  lng: 24.682703215857362, zoom: 13 },
-  Aleksandrovo: { lat: 43.263485163031106, lng: 24.93914766050204,  zoom: 13 },
-  Slavyani:     { lat: 43.2226968456665,   lng: 24.679719381073802, zoom: 13 },
-  Vladinya:     { lat: 43.291833980959524, lng: 24.79366642626967,  zoom: 13 },
-  Goran:        { lat: 43.20340048878466,  lng: 24.742856575322325, zoom: 13 },
-  Hlevene:      { lat: 43.08866912728859,  lng: 24.70450360106252,  zoom: 13 },
-  Kazachevo:    { lat: 43.080771947484685, lng: 24.749558197055453, zoom: 13 },
-  Lisets:       { lat: 43.184498831725996, lng: 24.65731716585288,  zoom: 13 },
-  Malinovo:     { lat: 43.03818774541016,  lng: 24.884369324257232, zoom: 13 },
-  Skobelevo:    { lat: 43.1558023736934,   lng: 24.65759247788928,  zoom: 13 },
-  Yoglav:       { lat: 43.208623452483884, lng: 24.824409569844295, zoom: 13 },
-  Radyuvene:    { lat: 43.12573932941868,  lng: 24.60238129782971,  zoom: 13 },
-  Sokolovo:     { lat: 43.0729834942493,   lng: 24.626895185649943, zoom: 13 },
-  Slivek:       { lat: 43.09905307010572,  lng: 24.748604488336365, zoom: 13 },
-  Presyaka:     { lat: 43.1568063030826,   lng: 24.773548444363975, zoom: 13 },
-  Gostinya:     { lat: 43.158061202538974, lng: 24.831607652359263, zoom: 13 },
-  Smochan:      { lat: 43.18284018591901,  lng: 24.798492400391574, zoom: 13 },
-  Slatina:      { lat: 43.2535967929977,   lng: 24.72723214191891,  zoom: 13 },
-  Doyrentsi:    { lat: 43.231284636810045, lng: 24.83739829825162,  zoom: 13 },
-  Umarevtsi:    { lat: 43.192359667799465, lng: 24.782863367178326, zoom: 13 },
+/** Center + zoom per settlement (for map flyTo). Keys must match SETTLEMENTS_BURGAS (excluding Друго). Lat/lng can be refreshed by running scripts/fetch-burgas-settlement-centers.mjs and merging scripts/burgas-settlements-centers.json. */
+export const SETTLEMENT_CENTERS_BURGAS: Record<string, { lat: number; lng: number; zoom: number }> = {
+  'Burgas':       { lat: 42.5048, lng: 27.4726, zoom: 13 },
+  'Balgarovo':    { lat: 42.61889207083687, lng: 27.30580646701816, zoom: 14 },
+  'Banevo':       { lat: 42.62506452992193, lng: 27.39573784484076, zoom: 14 },
+  'Bratovo':      { lat: 42.50546611169597, lng: 27.304455343128524, zoom: 14 },
+  'Bryastovets':  { lat: 42.67177810062171, lng: 27.465201371218907, zoom: 14 },
+  'Cherno More':  { lat: 42.61414707373521, lng: 27.490753426065567, zoom: 14 },
+  'Dimchevo':     { lat: 42.40386589237316, lng: 27.409266359353794, zoom: 14 },
+  'Draganovo':    { lat: 42.69655661166156, lng: 27.440069564212354, zoom: 14 },
+  'Izvor':        { lat: 42.35337227707259, lng: 27.459844384917982, zoom: 14 },
+  'Izvorishte':   { lat: 42.65706540856509, lng: 27.443159640639447, zoom: 14 },
+  'Marinka':      { lat: 42.39993186462875, lng: 27.484966513873648, zoom: 14 },
+  'Mirolyubovo':  { lat: 42.64456250538161, lng: 27.36387000338625, zoom: 14 },
+  'Ravnets':      { lat: 42.51447481429266, lng: 27.240983487249522, zoom: 14 },
+  'Rudnik':       { lat: 42.62633064007862, lng: 27.48799739201424, zoom: 14 },
+  'Tvarditsa':    { lat: 42.4096587688578, lng: 27.457958625801723, zoom: 14 },
+  'Vetren':       { lat: 42.60456907175186, lng: 27.38512588732114, zoom: 14 },
+  'ДРУГО (Other)': { lat: 42.5048, lng: 27.4726, zoom: 11 }, // Defaults to wide view of Burgas
 };
 
 /** Bulgarian labels for settlements (UI display). */
 export const SETTLEMENT_LABELS_BG: Record<string, string> = {
-  Lovech: 'Ловеч',
-  Bahovitsa: 'Баховица',
-  Aleksandrovo: 'Александрово',
-  Slavyani: 'Славяни',
-  Vladinya: 'Владиня',
-  Goran: 'Горан',
-  Hlevene: 'Хлевене',
-  Kazachevo: 'Казачево',
-  Lisets: 'Лисец',
-  Malinovo: 'Малиново',
-  Skobelevo: 'Скобелево',
-  Yoglav: 'Йоглав',
-  Radyuvene: 'Радювене',
-  Sokolovo: 'Соколово',
-  Slivek: 'Сливек',
-  Presyaka: 'Пресяка',
-  Gostinya: 'Гостиня',
-  Smochan: 'Смочан',
-  Slatina: 'Слатина',
-  Doyrentsi: 'Дойренци',
-  Umarevtsi: 'Умаревци',
+  'Burgas': 'Бургас',
+  'Balgarovo': 'Българово',
+  'Banevo': 'Банево',
+  'Bratovo': 'Братово',
+  'Bryastovets': 'Брястовец',
+  'Cherno More': 'Черно море',
+  'Dimchevo': 'Димчево',
+  'Draganovo': 'Драганово',
+  'Izvor': 'Извор',
+  'Izvorishte': 'Изворище',
+  'Marinka': 'Маринка',
+  'Mirolyubovo': 'Миролюбово',
+  'Ravnets': 'Равнец',
+  'Rudnik': 'Рудник',
+  'Tvarditsa': 'Твърдица',
+  'Vetren': 'Ветрен',
+  'ДРУГО (Other)': 'Друго',
 };
 
 /** Municipality overview (all settlements). */
-export const MUNICIPALITY_CENTER_LOVECH = { lat: 43.1332, lng: 24.7151, zoom: 12 };
-
+export const MUNICIPALITY_CENTER_BURGAS = { lat: 42.5048, lng: 27.4726, zoom: 11 };
 /** Padding (degrees) for max bounds around all settlement centers. */
 const BOUNDS_PADDING = 0.03;
 
-/** Map max bounds: min/max of all SETTLEMENT_CENTERS_LOVECH + BOUNDS_PADDING. Leaflet: [[south, west], [north, east]]. */
+/** Map max bounds: min/max of all SETTLEMENT_CENTERS_BURGAS + BOUNDS_PADDING. Leaflet: [[south, west], [north, east]]. */
 function computeMunicipalityBounds(): [[number, number], [number, number]] {
-  const centers = Object.values(SETTLEMENT_CENTERS_LOVECH);
+  const centers = Object.values(SETTLEMENT_CENTERS_BURGAS);
   const lats = centers.map((c) => c.lat);
   const lngs = centers.map((c) => c.lng);
   const minLat = Math.min(...lats);
@@ -216,4 +202,4 @@ function computeMunicipalityBounds(): [[number, number], [number, number]] {
   ];
 }
 
-export const MUNICIPALITY_BOUNDS_LOVECH = computeMunicipalityBounds();
+export const MUNICIPALITY_BOUNDS_BURGAS = computeMunicipalityBounds();

@@ -5,9 +5,9 @@ import type { ReportWithPhotos, ReportCategory } from '@/lib/types';
 import {
   CATEGORY_ICONS,
   CATEGORY_LABELS,
-  SETTLEMENTS_LOVECH,
-  SETTLEMENT_CENTERS_LOVECH,
-  MUNICIPALITY_CENTER_LOVECH,
+  SETTLEMENTS_BURGAS,
+  SETTLEMENT_CENTERS_BURGAS,
+  MUNICIPALITY_CENTER_BURGAS,
   SETTLEMENT_LABELS_BG,
 } from '@/lib/types';
 import type { Map as LMap, Marker as LMarker, LeafletMouseEvent } from 'leaflet';
@@ -15,8 +15,8 @@ import type { MarkerClusterGroup } from 'leaflet';
 import { ReportModal } from '@/components/ReportModal';
 import { getPopupContent } from '@/components/MarkerPopup';
 
-// Lovech, Bulgaria initial view (bounds moved to MUNICIPALITY_BOUNDS_LOVECH in lib/types.ts)
-const LOVECH_CENTER: [number, number] = [43.1332, 24.7151];
+// Burgas, Bulgaria initial view (bounds moved to MUNICIPALITY_BOUNDS_BURGAS in lib/types.ts)
+const BURGAS_CENTER: [number, number] = [42.5048, 27.4726];
 
 const BUCKET_URL =
   process.env.NEXT_PUBLIC_SUPABASE_URL &&
@@ -117,12 +117,12 @@ export function Map() {
     let target: { lat: number; lng: number; zoom: number } | null = null;
     if (value === '') {
       target = {
-        lat: MUNICIPALITY_CENTER_LOVECH.lat,
-        lng: MUNICIPALITY_CENTER_LOVECH.lng,
-        zoom: MUNICIPALITY_CENTER_LOVECH.zoom,
+        lat: MUNICIPALITY_CENTER_BURGAS.lat,
+        lng: MUNICIPALITY_CENTER_BURGAS.lng,
+        zoom: MUNICIPALITY_CENTER_BURGAS.zoom,
       };
-    } else if (SETTLEMENT_CENTERS_LOVECH[value]) {
-      const { lat, lng, zoom } = SETTLEMENT_CENTERS_LOVECH[value];
+    } else if (SETTLEMENT_CENTERS_BURGAS[value]) {
+      const { lat, lng, zoom } = SETTLEMENT_CENTERS_BURGAS[value];
       target = { lat, lng, zoom };
     }
 
@@ -157,9 +157,9 @@ export function Map() {
     setFilterSettlement('');
     const map = mapRef.current;
     const target = {
-      lat: MUNICIPALITY_CENTER_LOVECH.lat,
-      lng: MUNICIPALITY_CENTER_LOVECH.lng,
-      zoom: MUNICIPALITY_CENTER_LOVECH.zoom,
+      lat: MUNICIPALITY_CENTER_BURGAS.lat,
+      lng: MUNICIPALITY_CENTER_BURGAS.lng,
+      zoom: MUNICIPALITY_CENTER_BURGAS.zoom,
     };
     lastGoToTargetRef.current = target;
 
@@ -203,7 +203,7 @@ export function Map() {
       if (cancelled) return;
       if (mapRef.current || !containerRef.current) return;
 
-      const map = L.default.map(containerRef.current).setView(LOVECH_CENTER, 14);
+      const map = L.default.map(containerRef.current).setView(BURGAS_CENTER, 14);
       // OSM standard: blue rivers/water, green parks and nature (no API key)
       L.default.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
@@ -541,7 +541,7 @@ export function Map() {
             <div className="flex flex-row flex-wrap items-center gap-2">
               {/** Sorted settlement options by Bulgarian label */}
               {(() => {
-                const settlementOptions = SETTLEMENTS_LOVECH
+                const settlementOptions = SETTLEMENTS_BURGAS
                   .filter((s) => s !== 'Друго' && s !== 'Other')
                   .slice()
                   .sort((a, b) =>
@@ -571,10 +571,10 @@ export function Map() {
                 type="button"
                 onClick={handleBackToMunicipality}
                 disabled={!mapReady}
-                title="Върни към град Ловеч"
+                title="Върни към град Бургас"
                 className="shrink-0 h-11 rounded-xl border border-slate-200 bg-slate-900 text-white text-sm shadow-sm hover:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-sky-500/50 disabled:opacity-60 disabled:cursor-not-allowed px-4"
               >
-                Към град Ловеч
+                към град Бургас
               </button>
             </div>
           </div>

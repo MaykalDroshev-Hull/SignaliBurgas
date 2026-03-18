@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useRef, useCallback } from 'react';
-import { SEVERITY_LABELS, CATEGORY_LABELS, SETTLEMENTS_LOVECH, SETTLEMENT_LABELS_BG, CATEGORY_SEVERITY_LABELS } from '@/lib/types';
+import { SEVERITY_LABELS, CATEGORY_LABELS, SETTLEMENTS_BURGAS, SETTLEMENT_LABELS_BG, CATEGORY_SEVERITY_LABELS } from '@/lib/types';
 import type { Severity, ReportCategory } from '@/lib/types';
 import type { ReportWithPhotos } from '@/lib/types';
 
@@ -109,7 +109,7 @@ interface ReportModalProps {
 
 export function ReportModal({ lat, lng, onClose, onSuccess, onReportSubmitted }: ReportModalProps) {
   const [category, setCategory] = useState<ReportCategory>('pothole');
-  const [settlement, setSettlement] = useState('Lovech');
+  const [settlement, setSettlement] = useState('Burgas');
   const [settlementOther, setSettlementOther] = useState('');
   const [severity, setSeverity] = useState<Severity | null>(null);
   const [comment, setComment] = useState('');
@@ -196,7 +196,7 @@ export function ReportModal({ lat, lng, onClose, onSuccess, onReportSubmitted }:
     } else {
       formData.set('settlement', settlement);
     }
-    formData.set('municipality', 'Lovech');
+    formData.set('municipality', 'Burgas');
     formData.set('severity', String(severity));
     formData.set('comment', comment);
     formData.set('first_name', firstName.trim());
@@ -279,7 +279,7 @@ export function ReportModal({ lat, lng, onClose, onSuccess, onReportSubmitted }:
               onChange={(e) => setSettlement(e.target.value)}
               className="w-full rounded-lg bg-slate-50 border border-slate-200 px-3 py-3 sm:py-2 text-base sm:text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-sky-500/50"
             >
-              {SETTLEMENTS_LOVECH.filter((s) => s !== 'Друго').map((s) => (
+              {SETTLEMENTS_BURGAS.filter((s: string) => s !== 'Друго').map((s: string) => (
                 <option key={s} value={s}>{SETTLEMENT_LABELS_BG[s] ?? s}</option>
               ))}
               <option value="Друго">Друго</option>

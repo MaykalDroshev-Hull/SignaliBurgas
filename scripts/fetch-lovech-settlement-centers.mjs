@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 /**
- * One-time script: fetch lat/lng for Lovech Municipality settlements via OSM Nominatim.
- * Usage: node scripts/fetch-lovech-settlement-centers.mjs
- * Output: scripts/lovech-settlements-centers.json
+ * One-time script: fetch lat/lng for Burgas Municipality settlements via OSM Nominatim.
+ * Usage: node scripts/fetch-burgas-settlement-centers.mjs
+ * Output: scripts/burgas-settlements-centers.json
  * Requires Node 18+ (built-in fetch). Rate limit: 1100ms between requests.
  */
 
@@ -13,22 +13,26 @@ import { dirname, join } from 'path';
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
 const SETTLEMENT_NAMES = [
-  'Lovech',
-  'Bahovitsa',
-  'Lisets',
-  'Hlevene',
-  'Kazachevo',
-  'Slavyani',
-  'Vladinya',
-  'Goran',
-  'Malinovo',
-  'Skobelevo',
-  'Yoglav',
-  'Aleksandrovo',
+  'Burgas',
+  'Balgarovo',
+  'Banevo',
+  'Bratovo',
+  'Bryastovets',
+  'Cherno More',
+  'Dimchevo',
+  'Draganovo',
+  'Izvor',
+  'Izvorishte',
+  'Marinka',
+  'Mirolyubovo',
+  'Ravnets',
+  'Rudnik',
+  'Tvarditsa',
+  'Vetren',
 ];
 
 const NOMINATIM_URL = 'https://nominatim.openstreetmap.org/search';
-const USER_AGENT = 'signalilovech/1.0 (contact: signalilovech@example.com)';
+const USER_AGENT = 'signaliburgas/1.0 (contact: signaliburgas@example.com)';
 const RATE_LIMIT_MS = 1100;
 
 function sleep(ms) {
@@ -36,7 +40,7 @@ function sleep(ms) {
 }
 
 async function fetchSettlement(name) {
-  const q = `${encodeURIComponent(name)}, Lovech Municipality, Lovech Province, Bulgaria`;
+  const q = `${encodeURIComponent(name)}, Burgas Municipality, Burgas Province, Bulgaria`;
   const url = `${NOMINATIM_URL}?format=jsonv2&limit=1&q=${q}`;
   const res = await fetch(url, {
     headers: { 'User-Agent': USER_AGENT },
@@ -79,7 +83,7 @@ async function main() {
     }
   }
 
-  const outPath = join(__dirname, 'lovech-settlements-centers.json');
+  const outPath = join(__dirname, 'burgas-settlements-centers.json');
   writeFileSync(outPath, JSON.stringify(results, null, 2), 'utf8');
   console.log(`\nWrote ${outPath}`);
 

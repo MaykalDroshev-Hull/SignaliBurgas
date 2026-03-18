@@ -2,7 +2,7 @@ You are a senior full-stack engineer.
 
 Build a production-ready civic web application called:
 
-"Дупките на Ловеч"
+"Дупките на Бургас"
 
 Purpose:
 A public civic platform where citizens can report road potholes in Lovech, Bulgaria.
@@ -26,7 +26,7 @@ Homepage:
 - Fullscreen interactive map centered on Lovech, Bulgaria
 - Dark themeeeee
 - Title overlay at top center:
-  "ДУПКИТЕ НА ЛОВЕЧ"
+  "ДУПКИТЕ НА БУРГСА"
 - Subtitle:
   "Гражданска карта на пътните неравности"
 

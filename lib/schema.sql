@@ -1,43 +1,33 @@
--- ============================================
--- SUPABASE SCHEMA: Дупките на Ловеч
--- Run this in Supabase SQL Editor to create tables and storage.
--- ============================================
+-- WARNING: This schema is for context only and is not meant to be run.
+-- Table order and constraints may not be valid for execution.
 
--- Table: reports
--- Stores pothole reports. Only rows with verified = true are shown on the map.
--- create table reports (
---   id uuid primary key default gen_random_uuid(),
---   city text not null default 'Lovech',
---   lat float8 not null,
---   lng float8 not null,
---   severity int not null check (severity in (1, 2, 3)),
---   comment text,
---   email_hash text not null,
---   verify_token_hash text,
---   verified boolean not null default false,
---   created_at timestamptz not null default now()
--- );
-
--- Table: report_photos
--- Links report to uploaded images in storage.
--- create table report_photos (
---   id uuid primary key default gen_random_uuid(),
---   report_id uuid not null references reports(id) on delete cascade,
---   storage_path text not null,
---   created_at timestamptz not null default now()
--- );
-
--- Storage bucket: pothole-photos (create in Supabase Dashboard > Storage)
--- Policy: allow public read for verified display; allow authenticated/service role upload/delete.
-
--- Optional: RLS policies (use service role from server to bypass for API routes)
--- alter table reports enable row level security;
--- alter table report_photos enable row level security;
-
--- Migration: Add first_name and last_name (replace email with names, no verification)
--- Run in Supabase SQL Editor if your reports table lacks these columns:
-alter table reports add column if not exists first_name text;
-alter table reports add column if not exists last_name text;
-
--- Migration 002: Multi-category civic reporting (category, status, municipality, settlement, etc.)
--- Run lib/migrations/002_multi_category.sql in Supabase SQL Editor.
+CREATE TABLE public.report_photos (
+  id uuid NOT NULL DEFAULT gen_random_uuid(),
+  report_id uuid NOT NULL,
+  storage_path text NOT NULL,
+  created_at timestamp with time zone NOT NULL DEFAULT now(),
+  CONSTRAINT report_photos_pkey PRIMARY KEY (id),
+  CONSTRAINT report_photos_report_id_fkey FOREIGN KEY (report_id) REFERENCES public.reports(id)
+);
+CREATE TABLE public.reports (
+  id uuid NOT NULL DEFAULT gen_random_uuid(),
+  city text NOT NULL DEFAULT 'Burgas'::text,
+  lat double precision NOT NULL,
+  lng double precision NOT NULL,
+  severity integer NOT NULL CHECK (severity = ANY (ARRAY[1, 2, 3])),
+  comment text,
+  email_hash text NOT NULL,
+  verify_token_hash text,
+  verified boolean NOT NULL DEFAULT false,
+  created_at timestamp with time zone NOT NULL DEFAULT now(),
+  first_name text,
+  last_name text,
+  municipality text NOT NULL DEFAULT 'Burgas'::text,
+  settlement text NOT NULL DEFAULT 'Burgas'::text,
+  category text NOT NULL DEFAULT 'pothole'::text,
+  status text NOT NULL DEFAULT 'new'::text,
+  updated_at timestamp with time zone NOT NULL DEFAULT now(),
+  resolved_at timestamp with time zone,
+  metadata jsonb NOT NULL DEFAULT '{}'::jsonb,
+  CONSTRAINT reports_pkey PRIMARY KEY (id)
+);

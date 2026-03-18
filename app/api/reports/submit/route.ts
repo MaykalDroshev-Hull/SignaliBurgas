@@ -64,13 +64,13 @@ export async function POST(req: NextRequest) {
   const firstName = (formData.get('first_name') as string)?.trim() || '';
   const lastName = (formData.get('last_name') as string)?.trim() || '';
   const categoryRaw = (formData.get('category') as string)?.trim() || 'pothole';
-  const settlementRaw = (formData.get('settlement') as string)?.trim() || 'Lovech';
+  const settlementRaw = (formData.get('settlement') as string)?.trim() || 'Burgas';
   const settlementCustom = (formData.get('settlement_custom') as string)?.trim() || '';
-  const municipalityRaw = (formData.get('municipality') as string)?.trim() || 'Lovech';
+  const municipalityRaw = (formData.get('municipality') as string)?.trim() || 'Burgas';
 
   const validCategories = ['pothole', 'fallen_tree', 'road_marking', 'street_light', 'traffic_sign', 'hazard'];
   const category = validCategories.includes(categoryRaw) ? categoryRaw : 'pothole';
-  const municipality = municipalityRaw || 'Lovech';
+  const municipality = municipalityRaw || 'Burgas';
 
   if (settlementRaw === 'Other') {
     if (!settlementCustom) {
@@ -81,7 +81,7 @@ export async function POST(req: NextRequest) {
     }
   }
 
-  const settlement = settlementRaw === 'Other' ? 'Other' : (settlementRaw || 'Lovech');
+  const settlement = settlementRaw === 'Other' ? 'Other' : (settlementRaw || 'Burgas');
   const metadata = settlement === 'Other' ? { settlement_custom: settlementCustom } : {};
 
   if (!firstName || !lastName || !Number.isFinite(lat) || !Number.isFinite(lng) || ![1, 2, 3].includes(severity)) {
