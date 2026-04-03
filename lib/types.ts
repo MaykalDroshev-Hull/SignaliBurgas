@@ -142,23 +142,23 @@ export const SETTLEMENTS_BURGAS: string[] = [
 
 /** Center + zoom per settlement (for map flyTo). Keys must match SETTLEMENTS_BURGAS (excluding Друго). Lat/lng can be refreshed by running scripts/fetch-burgas-settlement-centers.mjs and merging scripts/burgas-settlements-centers.json. */
 export const SETTLEMENT_CENTERS_BURGAS: Record<string, { lat: number; lng: number; zoom: number }> = {
-  'Burgas':       { lat: 42.5048, lng: 27.4726, zoom: 13 },
-  'Balgarovo':    { lat: 42.61889207083687, lng: 27.30580646701816, zoom: 14 },
-  'Banevo':       { lat: 42.62506452992193, lng: 27.39573784484076, zoom: 14 },
-  'Bratovo':      { lat: 42.50546611169597, lng: 27.304455343128524, zoom: 14 },
-  'Bryastovets':  { lat: 42.67177810062171, lng: 27.465201371218907, zoom: 14 },
-  'Cherno More':  { lat: 42.61414707373521, lng: 27.490753426065567, zoom: 14 },
-  'Dimchevo':     { lat: 42.40386589237316, lng: 27.409266359353794, zoom: 14 },
-  'Draganovo':    { lat: 42.69655661166156, lng: 27.440069564212354, zoom: 14 },
-  'Izvor':        { lat: 42.35337227707259, lng: 27.459844384917982, zoom: 14 },
-  'Izvorishte':   { lat: 42.65706540856509, lng: 27.443159640639447, zoom: 14 },
-  'Marinka':      { lat: 42.39993186462875, lng: 27.484966513873648, zoom: 14 },
-  'Mirolyubovo':  { lat: 42.64456250538161, lng: 27.36387000338625, zoom: 14 },
-  'Ravnets':      { lat: 42.51447481429266, lng: 27.240983487249522, zoom: 14 },
-  'Rudnik':       { lat: 42.62633064007862, lng: 27.48799739201424, zoom: 14 },
-  'Tvarditsa':    { lat: 42.4096587688578, lng: 27.457958625801723, zoom: 14 },
-  'Vetren':       { lat: 42.60456907175186, lng: 27.38512588732114, zoom: 14 },
-  'ДРУГО (Other)': { lat: 42.5048, lng: 27.4726, zoom: 11 }, // Defaults to wide view of Burgas
+  'Burgas':       { lat: 42.5048, lng: 27.4726, zoom: 14 },
+  'Balgarovo':    { lat: 42.61889207083687, lng: 27.30580646701816, zoom: 15 },
+  'Banevo':       { lat: 42.62506452992193, lng: 27.39573784484076, zoom: 15 },
+  'Bratovo':      { lat: 42.50546611169597, lng: 27.304455343128524, zoom: 15 },
+  'Bryastovets':  { lat: 42.67177810062171, lng: 27.465201371218907, zoom: 15 },
+  'Cherno More':  { lat: 42.61414707373521, lng: 27.490753426065567, zoom: 15 },
+  'Dimchevo':     { lat: 42.40386589237316, lng: 27.409266359353794, zoom: 15 },
+  'Draganovo':    { lat: 42.69655661166156, lng: 27.440069564212354, zoom: 15 },
+  'Izvor':        { lat: 42.35337227707259, lng: 27.459844384917982, zoom: 15 },
+  'Izvorishte':   { lat: 42.65706540856509, lng: 27.443159640639447, zoom: 15 },
+  'Marinka':      { lat: 42.39993186462875, lng: 27.484966513873648, zoom: 15 },
+  'Mirolyubovo':  { lat: 42.64456250538161, lng: 27.36387000338625, zoom: 15 },
+  'Ravnets':      { lat: 42.51447481429266, lng: 27.240983487249522, zoom: 15 },
+  'Rudnik':       { lat: 42.62633064007862, lng: 27.48799739201424, zoom: 15 },
+  'Tvarditsa':    { lat: 42.4096587688578, lng: 27.457958625801723, zoom: 15 },
+  'Vetren':       { lat: 42.60456907175186, lng: 27.38512588732114, zoom: 15 },
+  'ДРУГО (Other)': { lat: 42.5048, lng: 27.4726, zoom: 12 }, // Defaults to wide view of Burgas
 };
 
 /** Bulgarian labels for settlements (UI display). */
@@ -183,7 +183,7 @@ export const SETTLEMENT_LABELS_BG: Record<string, string> = {
 };
 
 /** Municipality overview (all settlements). */
-export const MUNICIPALITY_CENTER_BURGAS = { lat: 42.5048, lng: 27.4726, zoom: 11 };
+export const MUNICIPALITY_CENTER_BURGAS = { lat: 42.5048, lng: 27.4726, zoom: 12 };
 /** Padding (degrees) for max bounds around all settlement centers. */
 const BOUNDS_PADDING = 0.03;
 

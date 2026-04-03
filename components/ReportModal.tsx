@@ -11,6 +11,16 @@ const TARGET_SIZE_BYTES = 1 * 1024 * 1024; // Target 1MB for compression
 const MAX_DIMENSION = 2048; // Max width/height in pixels
 const MAX_COMMENT_LENGTH = 500;
 
+function isValidEmail(value: string): boolean {
+  const s = value.trim();
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(s);
+}
+
+/** BG-friendly: поне 8 цифри (мобилен/стационарен). */
+function isValidPhoneDigits(digits: string): boolean {
+  return digits.length >= 8 && digits.length <= 15;
+}
+
 /**
  * Compress an image file using Canvas API
  * Returns the original file if it's already small enough or if compression fails
@@ -115,6 +125,9 @@ export function ReportModal({ lat, lng, onClose, onSuccess, onReportSubmitted }:
   const [comment, setComment] = useState('');
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
+  const [email, setEmail] = useState('');
+  const [phone, setPhone] = useState('');
+  const [gdprConsent, setGdprConsent] = useState(false);
   const [files, setFiles] = useState<File[]>([]);
   const [status, setStatus] = useState<'form' | 'submitting' | 'success' | 'error'>('form');
   const [errorMessage, setErrorMessage] = useState('');
@@ -162,6 +175,13 @@ export function ReportModal({ lat, lng, onClose, onSuccess, onReportSubmitted }:
     if (!severity) return 'Изберете тежест на сигнала.';
     if (!firstName.trim()) return 'Името е задължително.';
     if (!lastName.trim()) return 'Фамилията е задължителна.';
+    const emailTrim = email.trim();
+    if (!emailTrim) return 'Имейлът е задължителен.';
+    if (!isValidEmail(emailTrim)) return 'Въведете валиден имейл адрес.';
+    const phoneDigits = phone.replace(/\D/g, '');
+    if (!phoneDigits) return 'Телефонът е задължителен.';
+    if (!isValidPhoneDigits(phoneDigits)) return 'Въведете валиден телефон (поне 8 цифри).';
+    if (!gdprConsent) return 'Маркирайте съгласието за обработка на лични данни.';
     if (settlement === 'Друго') {
       if (!settlementOther.trim()) return 'Въведете населено място при избор "Друго".';
     } else if (!settlement) {
@@ -201,6 +221,9 @@ export function ReportModal({ lat, lng, onClose, onSuccess, onReportSubmitted }:
     formData.set('comment', comment);
     formData.set('first_name', firstName.trim());
     formData.set('last_name', lastName.trim());
+    formData.set('email', email.trim());
+    formData.set('phone', phone.trim());
+    formData.set('gdpr_consent', gdprConsent ? 'true' : 'false');
     files.forEach((f) => formData.append('images', f));
 
     try {
@@ -409,6 +432,50 @@ export function ReportModal({ lat, lng, onClose, onSuccess, onReportSubmitted }:
                 placeholder="Иванов"
               />
             </div>
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-slate-700 mb-1">Имейл *</label>
+            <input
+              type="email"
+              inputMode="email"
+              autoComplete="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+              className="w-full rounded-lg bg-slate-50 border border-slate-200 px-3 py-3 sm:py-2 text-base sm:text-sm text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-sky-500/50"
+              placeholder="ime@example.com"
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-slate-700 mb-1">Телефон *</label>
+            <input
+              type="tel"
+              inputMode="tel"
+              autoComplete="tel"
+              value={phone}
+              onChange={(e) => setPhone(e.target.value)}
+              required
+              className="w-full rounded-lg bg-slate-50 border border-slate-200 px-3 py-3 sm:py-2 text-base sm:text-sm text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-sky-500/50"
+              placeholder="+359 … или 08…"
+            />
+          </div>
+
+          <div className="rounded-lg border border-slate-200 bg-slate-50/80 p-3">
+            <label className="flex items-start gap-3 cursor-pointer">
+              <input
+                type="checkbox"
+                checked={gdprConsent}
+                onChange={(e) => setGdprConsent(e.target.checked)}
+                required
+                className="mt-1 h-4 w-4 rounded border-slate-300 text-sky-600 focus:ring-sky-500"
+              />
+              <span className="text-sm text-slate-700 leading-snug">
+                Съгласен/на съм личните ми данни (име, фамилия, имейл, телефон и снимки към сигнала) да се
+                съхраняват и обработват единствено във връзка с този граждански сигнал, съгласно приложимото
+                законодателство (вкл. GDPR). *
+              </span>
+            </label>
           </div>
 
           {errorMessage && (

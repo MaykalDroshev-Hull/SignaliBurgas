@@ -33,6 +33,10 @@ const MAX_IMAGES = 5;
 const MAX_IMAGE_BYTES = 4 * 1024 * 1024; // 4MB (images are compressed client-side)
 const BUCKET = 'pothole-photos';
 
+function isValidEmail(s: string): boolean {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(s);
+}
+
 /**
  * POST /api/reports/submit
  * Creates report (verified=true, no email verification). Rate limit: 1 per 5 min per IP.
@@ -63,6 +67,10 @@ export async function POST(req: NextRequest) {
   const comment = (formData.get('comment') as string)?.trim() || null;
   const firstName = (formData.get('first_name') as string)?.trim() || '';
   const lastName = (formData.get('last_name') as string)?.trim() || '';
+  const emailRaw = (formData.get('email') as string)?.trim().toLowerCase() || '';
+  const phoneRaw = (formData.get('phone') as string)?.trim() || '';
+  const phoneDigits = phoneRaw.replace(/\D/g, '');
+  const gdprConsent = formData.get('gdpr_consent') === 'true';
   const categoryRaw = (formData.get('category') as string)?.trim() || 'pothole';
   const settlementRaw = (formData.get('settlement') as string)?.trim() || 'Burgas';
   const settlementCustom = (formData.get('settlement_custom') as string)?.trim() || '';
@@ -82,7 +90,8 @@ export async function POST(req: NextRequest) {
   }
 
   const settlement = settlementRaw === 'Other' ? 'Other' : (settlementRaw || 'Burgas');
-  const metadata = settlement === 'Other' ? { settlement_custom: settlementCustom } : {};
+  const baseMeta: Record<string, unknown> =
+    settlement === 'Other' ? { settlement_custom: settlementCustom } : {};
 
   if (!firstName || !lastName || !Number.isFinite(lat) || !Number.isFinite(lng) || ![1, 2, 3].includes(severity)) {
     return NextResponse.json(
@@ -90,6 +99,28 @@ export async function POST(req: NextRequest) {
       { status: 400 }
     );
   }
+
+  if (!emailRaw || !isValidEmail(emailRaw)) {
+    return NextResponse.json({ error: 'Въведете валиден имейл адрес.' }, { status: 400 });
+  }
+  if (!phoneDigits || phoneDigits.length < 8 || phoneDigits.length > 15) {
+    return NextResponse.json(
+      { error: 'Въведете валиден телефон (поне 8 цифри).' },
+      { status: 400 }
+    );
+  }
+  if (!gdprConsent) {
+    return NextResponse.json(
+      { error: 'Необходимо е съгласие за обработка на лични данни.' },
+      { status: 400 }
+    );
+  }
+
+  const metadata = {
+    ...baseMeta,
+    phone_hash: hashString(phoneDigits),
+    gdpr_consent_at: new Date().toISOString(),
+  };
 
   const images = formData.getAll('images') as File[];
   if (!images.length || images.length > MAX_IMAGES) {
@@ -107,7 +138,7 @@ export async function POST(req: NextRequest) {
     }
   }
 
-  const emailHash = hashString(`${firstName}|${lastName}`);
+  const emailHash = hashString(emailRaw);
 
   let supabase;
   try {

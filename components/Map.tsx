@@ -203,7 +203,7 @@ export function Map() {
       if (cancelled) return;
       if (mapRef.current || !containerRef.current) return;
 
-      const map = L.default.map(containerRef.current).setView(BURGAS_CENTER, 14);
+      const map = L.default.map(containerRef.current).setView(BURGAS_CENTER, 15);
       // OSM standard: blue rivers/water, green parks and nature (no API key)
       L.default.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
